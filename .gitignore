@@ -1,0 +1,8 @@
+# Traditional ignores
+.git/*
+.DS_Store
+
+# Python
+.venv/*
+__pycache__/*
+vault/*

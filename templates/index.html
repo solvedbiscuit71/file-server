@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>File Server</title>
+		<link href="{{ url_for('static', path='/style.css') }}" rel="stylesheet">
+	</head>
+	<body>
+		<h1>File Server</h1>
+		<fieldset>
+			<form action="/upload" method="post" enctype="multipart/form-data">
+				<input type="file" name="file">
+				<button type="submit">Upload</button>
+			</form>
+		</fieldset>
+
+		<fieldset>
+			{% if files %}
+				<ul>
+				{% for file in files %}
+					<li>
+					<a href="{{ url_for('vault', path='/' + file) }}" target="_blank">{{ file }}</a>
+					<a class="button" href="/delete/{{ file }}" onclick="return confirm('Are you sure you want to delete this file?');">[delete]</a>
+					</li>
+				{% endfor %}
+				</ul>
+			{% else %}
+				<p>No file in vault, upload a new file</p>
+			{% endif %}
+		</fieldset>
+	</body>
+</html>
