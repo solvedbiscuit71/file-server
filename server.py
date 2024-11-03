@@ -1,3 +1,4 @@
+import os
 import shutil
 from pathlib import Path
 
@@ -5,14 +6,32 @@ from fastapi import FastAPI, HTTPException, Request, UploadFile
 from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from termcolor import colored
+
+vault_path = os.getenv("VAULT_DIR")
+if vault_path is None or len(vault_path) == 0:
+    print(
+        colored("ERROR", "red"),
+        "\t",
+        f"Environment variable {colored('VAULT_DIR', 'yellow')} is not set.",
+    )
+    print(
+        colored("INFO", "blue"),
+        "\t",
+        f"Run {colored('export VAULT_DIR=$(pwd)/vault', 'yellow')} for creating a vault directory in CWD.",
+    )
+    exit(0)
+else:
+    print(colored("INFO", "blue"), "\t", "Vault at", vault_path)
+
+vault = Path(vault_path)
+vault.mkdir(parents=True, exist_ok=True)
 
 app = FastAPI()
 
-app.mount("/vault", StaticFiles(directory="vault"), name="vault")
+app.mount("/vault", StaticFiles(directory=vault_path), name="vault")
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-vault = Path("vault")
-vault.mkdir(exist_ok=True)
 
 templates = Jinja2Templates(directory="templates")
 
