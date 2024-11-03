@@ -1,0 +1,13 @@
+# OS specific
+.DS_Store
+
+# Git
+.git/
+.gitignore
+
+# Python
+.venv/
+__pycache__/
+
+# App specific
+vault/
